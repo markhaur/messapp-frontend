@@ -13,6 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import restaurant from '../img/restaurant.jfif';
+import { login } from '../api/apis';
 
 function Copyright(props) {
   return (
@@ -30,13 +31,26 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignInSide() {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const loginRequest = {
+      employeeid: data.get('email'),
+      password: data.get('password')
+    }
+
+    if (loginRequest.employeeid === "" || loginRequest.password === "") {
+      alert('Fill in required information!')
+      return
+    }
+
+    let result = await login(loginRequest)
+    if (result.isOk) {
+      localStorage.setItem('USER', JSON.stringify(result.data))
+      window.location = 'http://127.0.0.1:3000/dashboard'
+    } else {
+      alert('login unsuccessful')
+    }
   };
 
   return (

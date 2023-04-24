@@ -9,18 +9,18 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
+import LogoutIcon from '@mui/icons-material/Logout';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
 import Chart from './Chart';
 import Orders from './Orders';
 import ReservationCount from './ReservationCount';
+import { logout } from '../api/apis';
 
 function Copyright(props) {
   return (
@@ -58,6 +58,14 @@ const data = [
 // Generate Reservation Data
 function createReservation(id, date, name, time, guests, totalResr) {
   return { id, date, name, time, guests, totalResr };
+}
+
+async function handleLogout() {
+  let result = await logout()
+  if (!result.isOk) {
+    alert('Unsuccessful logout')
+  }
+  window.location = 'http://127.0.0.1:3000/login'
 }
 
 const reservations = [
@@ -138,8 +146,7 @@ function DashboardContent() {
               aria-label="open drawer"
               onClick={toggleDrawer}
               sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
+                marginRight: '36px'
               }}
             >
               <MenuIcon />
@@ -153,10 +160,8 @@ function DashboardContent() {
             >
               Dashboard
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
+            <IconButton color="inherit" onClick={handleLogout}>
+              <LogoutIcon />
             </IconButton>
           </Toolbar>
         </AppBar>

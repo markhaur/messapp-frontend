@@ -10,10 +10,14 @@ import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 
+let name = ''
+if ('USER' in localStorage) {
+  name = JSON.parse(localStorage.getItem('USER')).name
+}
 export const mainListItems = (
   <React.Fragment>
     <ListSubheader component="div" inset>
-      Hey Faisal!
+      {`Hey ${name}!`}
     </ListSubheader>
     <ListItemButton href="http://localhost:3000/dashboard">
       <ListItemIcon>

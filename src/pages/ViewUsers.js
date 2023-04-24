@@ -9,19 +9,17 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
+import LogoutIcon from '@mui/icons-material/Logout';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
-import Chart from './Chart';
-import Orders from './Orders';
 import ReservationCount from './ReservationCount';
 import Users from './Users';
+import { getAllUsers, logout } from '../api/apis';
 
 function Copyright(props) {
   return (
@@ -36,38 +34,14 @@ function Copyright(props) {
   );
 }
 
-// Generate Sales Data
-function createData(date, reservations) {
-  return { date, reservations };
+
+async function handleLogout() {
+  let result = await logout()
+  if (!result.isOk) {
+    alert('Unsuccessful logout')
+  }
+  window.location = 'http://127.0.0.1:3000/login'
 }
-
-const data = [
-  createData('Jan', 0),
-  createData('Feb', 10),
-  createData('Mar', 10),
-  createData('Apr', 10),
-  createData('May', 10),
-  createData('Jun', 10),
-  createData('Jul', 10),
-  createData('Aug', 10),
-  createData('Sep', 10),
-  createData('Oct', 10),
-  createData('Nov', 10),
-  createData('Dec', 10),
-];
-
-// Generate Reservation Data
-function createUser(id, createdAt, name, designation, employeeID, role, isDisable) {
-  return { id, createdAt, name, designation, employeeID, role, isDisable };
-}
-
-const users = [
-  createUser(0, '16 Mar, 2019', 'Elvis Presley', 'Assistant Manager', '1111', 'Admin', true),
-  createUser(1, '16 Mar, 2019', 'Paul McCartney', 'Manager', '1112', 'User', false),
-  createUser(2, '16 Mar, 2019', 'Tom Scholz', 'General Manager', '1113', 'User', false),
-  createUser(3, '16 Mar, 2019', 'Michael Jackson', 'Assistant Manager', '1114', 'User', false),
-  createUser(4, '15 Mar, 2019', 'Bruce Springsteen', 'Manager', '1115', 'Admin', false),
-];
 
 const drawerWidth = 240;
 
@@ -123,6 +97,46 @@ function DashboardContent() {
     setOpen(!open);
   };
 
+  const [users, setUsers] = React.useState([]);
+  const [userStats, setUserStats] = React.useState({});
+
+  React.useEffect(() => {
+    async function fetchData() {
+      const response = await getAllUsers();
+      if (response.isOk) {
+        let temp = []
+        let activeCouter = 0;
+        let adminCounter = 0;
+        response.data.forEach(user => {
+          temp.push({ 
+            id: user.id, 
+            createdAt: user.createdAt, 
+            name: user.name, 
+            designation: user.designation, 
+            employeeID: user.employeeID, 
+            role: user.admin ? 'ADMIN' : 'USER', 
+            isDisable: user.active ? false : true 
+          });
+
+          if (user.active) {
+            activeCouter = activeCouter + 1;
+          }
+          if (user.admin) {
+            adminCounter = adminCounter + 1;
+          }
+        });
+        setUsers(temp)
+        setUserStats({ 
+          totalUsers: temp.length, 
+          activeUsers: activeCouter, 
+          inactiveUsers: temp.length - activeCouter,
+          adminUsers: adminCounter,
+        })
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -154,10 +168,8 @@ function DashboardContent() {
             >
               Users
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
+            <IconButton color="inherit" onClick={handleLogout}>
+              <LogoutIcon />
             </IconButton>
           </Toolbar>
         </AppBar>
@@ -208,7 +220,7 @@ function DashboardContent() {
                 >
                   <ReservationCount 
                     title={"Total Users"}
-                    count={123}
+                    count={userStats.totalUsers}
                     link={""}
                     linkDescription={""}
                   />
@@ -226,7 +238,7 @@ function DashboardContent() {
                 >
                   <ReservationCount 
                     title={"Active Users"}
-                    count={120}
+                    count={userStats.activeUsers}
                     link={""}
                     linkDescription={""}
                   />
@@ -244,7 +256,7 @@ function DashboardContent() {
                 >
                   <ReservationCount 
                     title={"Inactive Users"}
-                    count={2}
+                    count={userStats.inactiveUsers}
                     link={""}
                     linkDescription={""}
                   />
@@ -261,7 +273,7 @@ function DashboardContent() {
                 >
                   <ReservationCount 
                     title={"Admin Users"}
-                    count={1}
+                    count={userStats.adminUsers}
                     link={""}
                     linkDescription={""}
                   />
