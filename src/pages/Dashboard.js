@@ -17,10 +17,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { mainListItems } from './listItems';
-import Chart from './Chart';
 import Orders from './Orders';
 import ReservationCount from './ReservationCount';
-import { logout } from '../api/apis';
+import { logout, getReservationsByDate } from '../api/apis';
+
+const options = { day: '2-digit', month: 'long', year: 'numeric' };
 
 function Copyright(props) {
   return (
@@ -35,31 +36,6 @@ function Copyright(props) {
   );
 }
 
-// Generate Sales Data
-function createData(date, reservations) {
-  return { date, reservations };
-}
-
-const data = [
-  createData('Jan', 0),
-  createData('Feb', 10),
-  createData('Mar', 10),
-  createData('Apr', 10),
-  createData('May', 10),
-  createData('Jun', 10),
-  createData('Jul', 10),
-  createData('Aug', 10),
-  createData('Sep', 10),
-  createData('Oct', 10),
-  createData('Nov', 10),
-  createData('Dec', 10),
-];
-
-// Generate Reservation Data
-function createReservation(id, date, name, time, guests, totalResr) {
-  return { id, date, name, time, guests, totalResr };
-}
-
 async function handleLogout() {
   let result = await logout()
   if (!result.isOk) {
@@ -67,14 +43,6 @@ async function handleLogout() {
   }
   window.location = 'http://127.0.0.1:3000/login'
 }
-
-const reservations = [
-  createReservation(0, '16 Mar, 2019', 'Elvis Presley', '09:00 AM', '02', '03'),
-  createReservation(1, '16 Mar, 2019', 'Paul McCartney', '09:00 AM', '03', '04'),
-  createReservation(2, '16 Mar, 2019', 'Tom Scholz', '09:01 AM', '00', '01'),
-  createReservation(3, '16 Mar, 2019', 'Michael Jackson', '09:00 AM', '01', '02'),
-  createReservation(4, '15 Mar, 2019', 'Bruce Springsteen', '09:02 AM', '03', '04'),
-];
 
 const drawerWidth = 240;
 
@@ -129,6 +97,41 @@ function DashboardContent() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const [reservations, setReservations] = React.useState([]);
+  const [reservationStats, setReservationStats] = React.useState({});
+  const [date, setDate] = React.useState()
+
+  React.useEffect(() => {
+    async function fetchData() {
+      let today = new Date().toISOString().split('T')[0];
+      let response = await getReservationsByDate(today)
+      if (response.isOk) {
+        let temp = [];
+        let totalGuests = 0;
+        let counter = 0;
+        for(let i = response.data.length - 1; i >= 0; i--) {
+          let reservation = response.data[i]
+          totalGuests = totalGuests + reservation.no_of_guests;
+          if (counter < 5) {
+            temp.push({
+              id: reservation.id, 
+              date: today, 
+              name: reservation.name, 
+              time: reservation.reservation_time, 
+              guests: reservation.no_of_guests, 
+              totalResr: reservation.no_of_guests + 1,
+            });
+            counter = counter + 1;
+          }
+        }
+        setReservations(temp);
+        setReservationStats({ totalReservations: response.data.length, totalGuests, totalMeals: response.data.length + totalGuests});
+        setDate(new Date().toLocaleDateString('en-US', options))
+      }
+    }
+    fetchData();
+  }, []);
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -198,8 +201,8 @@ function DashboardContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
-              {/* Chart */}
-              <Grid item xs={12} md={8} lg={9}>
+              {/* Recent Deposits */}
+              <Grid item xs={12} md={4} lg={3}>
                 <Paper
                   sx={{
                     p: 2,
@@ -208,9 +211,12 @@ function DashboardContent() {
                     height: 240,
                   }}
                 >
-                  <Chart 
-                    title={"Monthly Reservations"}
-                    data={data}
+                  <ReservationCount 
+                    title={"Today's Reservations"}
+                    count={reservationStats.totalReservations}
+                    link={"http://localhost:3000/reservations"}
+                    linkDescription={"View today's reservations"}
+                    date={date}
                   />
                 </Paper>
               </Grid>
@@ -225,10 +231,30 @@ function DashboardContent() {
                   }}
                 >
                   <ReservationCount 
-                    title={"Today's Reservations"}
-                    count={12}
+                    title={"Today's Guests"}
+                    count={reservationStats.totalGuests}
                     link={"http://localhost:3000/reservations"}
                     linkDescription={"View today's reservations"}
+                    date={date}
+                  />
+                </Paper>
+              </Grid>
+              {/* Recent Deposits */}
+              <Grid item xs={12} md={4} lg={3}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: 240,
+                  }}
+                >
+                  <ReservationCount 
+                    title={"Today's Meals"}
+                    count={reservationStats.totalMeals}
+                    link={"http://localhost:3000/reservations"}
+                    linkDescription={"View today's reservations"}
+                    date={date}
                   />
                 </Paper>
               </Grid>

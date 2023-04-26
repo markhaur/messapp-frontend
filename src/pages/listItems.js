@@ -7,6 +7,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
+import FastfoodIcon from '@mui/icons-material/Fastfood';
 
 let name = ''
 if ('USER' in localStorage) {
@@ -28,6 +29,12 @@ export const mainListItems = (
         <RestaurantIcon />
       </ListItemIcon>
       <ListItemText primary="Reservations" />
+    </ListItemButton>
+    <ListItemButton href="http://localhost:3000/reservations">
+      <ListItemIcon>
+        <FastfoodIcon />
+      </ListItemIcon>
+      <ListItemText primary="Book Reservation" />
     </ListItemButton>
     <ListItemButton href="http://localhost:3000/adduser">
       <ListItemIcon>

@@ -238,7 +238,6 @@ function ReservationContent() {
                 >
                   <Title>Select Date</Title>
                   <input type="date" value={date} onChange={handleDateChange} />
-                  {/* <DatePicker /> */}
                 </Paper>
               </Grid>
               {/* Recent Deposits */}
