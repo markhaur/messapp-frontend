@@ -114,7 +114,7 @@ function DashboardContent() {
             name: user.name, 
             designation: user.designation, 
             employeeID: user.employeeID, 
-            role: user.admin ? 'ADMIN' : 'USER', 
+            role: user.admin ? 'Admin' : 'User', 
             isDisable: user.active ? false : true 
           });
 

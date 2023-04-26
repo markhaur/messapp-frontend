@@ -11,7 +11,7 @@ export default function ReservationCount(props) {
         {props.count}
       </Typography>
       <Typography color="text.secondary" sx={{ flex: 1 }}>
-        on 05 April, 2023
+        on {props.date}
       </Typography>
       <div>
         <Link color="primary" href={props.link}>

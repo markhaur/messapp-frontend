@@ -16,11 +16,14 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import Title from './Title';
 import { mainListItems } from './listItems';
-import Chart from './Chart';
 import Orders from './Orders';
 import ReservationCount from './ReservationCount';
-import { logout } from '../api/apis';
+import { logout, getReservationsByDate } from '../api/apis';
+
+
+const options = { day: '2-digit', month: 'long', year: 'numeric' };
 
 function Copyright(props) {
   return (
@@ -44,36 +47,6 @@ async function handleLogout() {
 }
 
 // Generate Sales Data
-function createData(date, reservations) {
-  return { date, reservations };
-}
-
-const data = [
-  createData('1', 0),
-  createData('2', 10),
-  createData('3', 10),
-  createData('4', 10),
-  createData('5', 10),
-  createData('6', 10),
-  createData('7', 10),
-  createData('8', 10),
-  createData('9', 10),
-  createData('10', 10),
-];
-
-// Generate Reservation Data
-function createReservation(id, date, name, time, guests, totalResr) {
-  return { id, date, name, time, guests, totalResr };
-}
-
-const reservations = [
-  createReservation(0, '16 Mar, 2019', 'Elvis Presley', '09:00 AM', '02', '03'),
-  createReservation(1, '16 Mar, 2019', 'Paul McCartney', '09:00 AM', '03', '04'),
-  createReservation(2, '16 Mar, 2019', 'Tom Scholz', '09:01 AM', '00', '01'),
-  createReservation(3, '16 Mar, 2019', 'Michael Jackson', '09:00 AM', '01', '02'),
-  createReservation(4, '15 Mar, 2019', 'Bruce Springsteen', '09:02 AM', '03', '04'),
-];
-
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -127,6 +100,62 @@ function ReservationContent() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const [reservations, setReservations] = React.useState([]);
+  const [reservationStats, setReservationStats] = React.useState({});
+  const [date, setDate] = React.useState()
+
+  const handleDateChange = (event) => {
+    setDate(event.target.value);
+    async function fetchData() {
+      let response = await getReservationsByDate(event.target.value);
+      if (response.isOk) {
+        let temp = []
+        let totalGuests = 0;
+        response.data.forEach(reservation => {
+          totalGuests = totalGuests + reservation.no_of_guests;
+          temp.push({
+            id: reservation.id, 
+            date: event.target.value,
+            name: reservation.name, 
+            time: reservation.reservation_time, 
+            guests: reservation.no_of_guests, 
+            totalResr: reservation.no_of_guests + 1,
+          }); 
+        });
+        setReservations(temp)
+        setReservationStats({ totalReservations: temp.length, totalGuests, totalMeals: temp.length + totalGuests});
+        setDate(event.target.value)
+      }
+    }
+    fetchData();
+  }
+
+  React.useEffect(() => {
+    async function fetchData() {
+      let today = new Date().toISOString().split('T')[0];
+      let response = await getReservationsByDate(today)
+      if (response.isOk) {
+        let temp = [];
+        let totalGuests = 0;
+        response.data.forEach(reservation => {
+          totalGuests = totalGuests + reservation.no_of_guests;
+          temp.push({
+            id: reservation.id, 
+            date: today, 
+            name: reservation.name, 
+            time: reservation.reservation_time, 
+            guests: reservation.no_of_guests, 
+            totalResr: reservation.no_of_guests + 1,
+          });
+        });
+        setReservations(temp);
+        setReservationStats({ totalReservations: temp.length, totalGuests, totalMeals: temp.length + totalGuests});
+        setDate(new Date().toLocaleDateString('en-US', options))
+      }
+    }
+    fetchData();
+  }, []);
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -197,8 +226,8 @@ function ReservationContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
-              {/* Chart */}
-              <Grid item xs={12} md={8} lg={9}>
+              {/* Recent Deposits */}
+              <Grid item xs={12} md={4} lg={3}>
                 <Paper
                   sx={{
                     p: 2,
@@ -207,9 +236,27 @@ function ReservationContent() {
                     height: 240,
                   }}
                 >
-                  <Chart 
-                    title={"Daily Reservations"}
-                    data={data}
+                  <Title>Select Date</Title>
+                  <input type="date" value={date} onChange={handleDateChange} />
+                  {/* <DatePicker /> */}
+                </Paper>
+              </Grid>
+              {/* Recent Deposits */}
+              <Grid item xs={12} md={4} lg={3}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: 240,
+                  }}
+                >
+                  <ReservationCount 
+                    title={"Total Reservations"}
+                    count={reservationStats.totalReservations}
+                    link={""}
+                    linkDescription={""}
+                    date={date}
                   />
                 </Paper>
               </Grid>
@@ -224,10 +271,30 @@ function ReservationContent() {
                   }}
                 >
                   <ReservationCount 
-                    title={"Today's Reservations"}
-                    count={11}
-                    link={"http://localhost:3000/reservations"}
-                    linkDescription={"View today's reservations"}
+                    title={"Total Guests"}
+                    count={reservationStats.totalGuests}
+                    link={""}
+                    linkDescription={""}
+                    date={date}
+                  />
+                </Paper>
+              </Grid>
+              {/* Recent Deposits */}
+              <Grid item xs={12} md={4} lg={3}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: 240,
+                  }}
+                >
+                  <ReservationCount 
+                    title={"Total Meals"}
+                    count={reservationStats.totalMeals}
+                    link={""}
+                    linkDescription={""}
+                    date={date}
                   />
                 </Paper>
               </Grid>

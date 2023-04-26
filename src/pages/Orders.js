@@ -11,7 +11,7 @@ import Title from './Title';
 export default function Orders(props) {
   return (
     <React.Fragment>
-      <Title>Recent Reservations</Title>
+      <Title>Reservations</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
