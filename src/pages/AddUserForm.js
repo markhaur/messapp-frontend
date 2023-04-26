@@ -10,19 +10,45 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { addUser } from '../api/apis';
 
 const theme = createTheme();
 
 export default function AddUserForm() {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    let addUserRequest = {
       name: data.get('name'),
-      empid: data.get('empid'),
+      employeeid: data.get('empid'),
       designation: data.get('designation'),
-      admin: data.get('admin')
-    });
+      admin: data.get('admin') ? 1 : 0,
+      active: data.get('active') ? 1 : 0,
+    }
+    
+    if (addUserRequest.name === "" || 
+        addUserRequest.employeeid === "" || 
+        addUserRequest.designation === "") {
+      alert('Please provide required information!')
+      return;
+    }
+    
+    let result = await addUser(addUserRequest);
+    
+    if (result.isOk) {
+      alert('User is successfully saved!')
+      window.location = 'http://127.0.0.1:3000/viewuser'
+    } else {
+      alert('There is problem while saving user!')
+    }
+    console.log('response: ', result.data)
+    // console.log({
+    //   name: data.get('name'),
+    //   empid: data.get('empid'),
+    //   designation: data.get('designation'),
+    //   admin: data.get('admin'),
+    //   active: data.get('active')
+    // });
   };
 
   return (
@@ -73,9 +99,14 @@ export default function AddUserForm() {
               autoComplete="designation"
             />
             <FormControlLabel
-              control={<Checkbox value={true} color="primary" />}
+              control={<Checkbox value={1} color="primary" />}
               label="Admin"
               name="admin"
+            />
+            <FormControlLabel
+              control={<Checkbox value={1} color="primary" />}
+              label="Active"
+              name="active"
             />
             <Button
               type="submit"
