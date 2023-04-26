@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import restaurant from '../img/restaurant.jfif';
 import { login } from '../api/apis';
+import { AppConfig } from '../config/Config';
 
 function Copyright(props) {
   return (
@@ -45,7 +46,8 @@ export default function SignInSide() {
     let result = await login(loginRequest)
     if (result.isOk) {
       localStorage.setItem('USER', JSON.stringify(result.data))
-      window.location = 'http://127.0.0.1:3000/dashboard'
+      window.location = AppConfig.DASHBOARD_URL;
+      // window.location = 'http://127.0.0.1:3000/dashboard'
     } else {
       alert('login unsuccessful')
     }
