@@ -36,7 +36,6 @@ export default function BookReservationForm() {
     } else {
       alert('There is problem while saving user!')
     }
-    console.log('response: ', result.data)
   };
 
   return (

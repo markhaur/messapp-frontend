@@ -9,17 +9,14 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import FastfoodIcon from '@mui/icons-material/Fastfood';
 
-let user = {}
-if ('USER' in localStorage) {
-  user = JSON.parse(localStorage.getItem('USER'))
-}
+let user = JSON.parse(localStorage.getItem('USER'))
 
 export const mainListItems = (
   <React.Fragment>
     <ListSubheader component="div" inset>
-      {`Hey ${user.name}!`}
+      {`Hey ${user?.name}!`}
     </ListSubheader>
-    {user.admin === 1 && 
+    {user?.admin === 1 && 
     <ListItemButton href="http://localhost:3000/dashboard">
       <ListItemIcon>
         <DashboardIcon />
@@ -39,7 +36,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Lunch Reservation" />
     </ListItemButton>
-    {user.admin === 1 && 
+    {user?.admin === 1 && 
     <ListItemButton href="http://localhost:3000/adduser">
       <ListItemIcon>
         <PersonAddIcon />
@@ -47,7 +44,7 @@ export const mainListItems = (
       <ListItemText primary="Add Users" />
     </ListItemButton>
     }
-    {user.admin === 1 && <ListItemButton href="http://localhost:3000/viewuser">
+    {user?.admin === 1 && <ListItemButton href="http://localhost:3000/viewuser">
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>

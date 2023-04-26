@@ -91,7 +91,6 @@ function DashboardContent() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('USER');
     localStorage.clear();
     window.location = "http://localhost:3000/login";
   }
@@ -101,6 +100,10 @@ function DashboardContent() {
   const [date, setDate] = React.useState()
 
   React.useEffect(() => {
+    let loggedInUser = localStorage.getItem('USER');
+    if (!loggedInUser) {
+      window.location = 'http://localhost:3000/login'
+    }
     async function fetchData() {
       let today = new Date().toISOString().split('T')[0];
       let response = await getReservationsByDate(today)

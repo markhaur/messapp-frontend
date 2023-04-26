@@ -87,10 +87,16 @@ function UserPage() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('USER');
     localStorage.clear();
     window.location = "http://localhost:3000/login";
   }
+  
+  React.useEffect(() => {
+    let loggedInUser = localStorage.getItem('USER');
+    if (!loggedInUser) {
+      window.location = 'http://localhost:3000/login'
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={mdTheme}>

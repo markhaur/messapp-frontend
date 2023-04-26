@@ -89,7 +89,6 @@ function DashboardContent() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('USER');
     localStorage.clear();
     window.location = "http://localhost:3000/login";
   }
@@ -98,6 +97,10 @@ function DashboardContent() {
   const [userStats, setUserStats] = React.useState({});
 
   React.useEffect(() => {
+    let loggedInUser = localStorage.getItem('USER');
+    if (!loggedInUser) {
+      window.location = 'http://localhost:3000/login'
+    }
     async function fetchData() {
       const response = await getAllUsers();
       if (response.isOk) {

@@ -20,10 +20,11 @@ import Title from './Title';
 import { mainListItems } from './listItems';
 import Orders from './Orders';
 import ReservationCount from './ReservationCount';
-import { getReservationsByDate } from '../api/apis';
+import { getReservationsByDate, getReservationsByID } from '../api/apis';
 
 
 const options = { day: '2-digit', month: 'long', year: 'numeric' };
+const user = JSON.parse(localStorage.getItem('USER'));
 
 function Copyright(props) {
   return (
@@ -94,7 +95,6 @@ function ReservationContent() {
   };
   
   const handleLogout = () => {
-    localStorage.removeItem('USER');
     localStorage.clear();
     window.location = "http://localhost:3000/login";
   }
@@ -106,7 +106,12 @@ function ReservationContent() {
   const handleDateChange = (event) => {
     setDate(event.target.value);
     async function fetchData() {
-      let response = await getReservationsByDate(event.target.value);
+      let response = null
+      if (user.admin === 1) {
+        response = await getReservationsByDate(event.target.value);
+      } else {
+        response = await getReservationsByID(user.id)
+      }
       if (response.isOk) {
         let temp = []
         let totalGuests = 0;
@@ -131,9 +136,19 @@ function ReservationContent() {
   }
 
   React.useEffect(() => {
+    let loggedInUser = localStorage.getItem('USER');
+    if (!loggedInUser) {
+      window.location = 'http://localhost:3000/login'
+    }
+
     async function fetchData() {
       let today = new Date().toISOString().split('T')[0];
-      let response = await getReservationsByDate(today)
+      let response = null;
+      if (user.admin === 1) {
+        response = await getReservationsByDate(today);
+      } else {
+        response = await getReservationsByID(user.id)
+      }
       if (response.isOk) {
         let temp = [];
         let totalGuests = 0;
@@ -142,7 +157,7 @@ function ReservationContent() {
           totalGuests = totalGuests + reservation.no_of_guests;
           temp.push({
             id: reservation.id, 
-            date: today, 
+            date: reservation.reservation_time.split('T')[0], 
             name: reservation.name, 
             time: reservation.reservation_time, 
             guests: reservation.no_of_guests, 
@@ -227,6 +242,7 @@ function ReservationContent() {
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
               {/* Recent Deposits */}
+              {user?.admin === 1 && 
               <Grid item xs={12} md={4} lg={3}>
                 <Paper
                   sx={{
@@ -240,6 +256,7 @@ function ReservationContent() {
                   <input type="date" value={date} onChange={handleDateChange} />
                 </Paper>
               </Grid>
+              }
               {/* Recent Deposits */}
               <Grid item xs={12} md={4} lg={3}>
                 <Paper
