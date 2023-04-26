@@ -94,8 +94,9 @@ function ReservationContent() {
   };
   
   const handleLogout = () => {
-    localStorage.clear()
-    window.location = "http://localhost:3000/login"
+    localStorage.removeItem('USER');
+    localStorage.clear();
+    window.location = "http://localhost:3000/login";
   }
 
   const [reservations, setReservations] = React.useState([]);

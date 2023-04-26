@@ -87,8 +87,9 @@ function UserPage() {
   };
 
   const handleLogout = () => {
-    localStorage.clear()
-    window.location = "http://localhost:3000/login"
+    localStorage.removeItem('USER');
+    localStorage.clear();
+    window.location = "http://localhost:3000/login";
   }
 
   return (
