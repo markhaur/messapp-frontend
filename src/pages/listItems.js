@@ -19,12 +19,14 @@ export const mainListItems = (
     <ListSubheader component="div" inset>
       {`Hey ${user.name}!`}
     </ListSubheader>
+    {user.admin === 1 && 
     <ListItemButton href="http://localhost:3000/dashboard">
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItemButton>
+    }
     <ListItemButton href="http://localhost:3000/reservations">
       <ListItemIcon>
         <RestaurantIcon />
@@ -37,17 +39,20 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Lunch Reservation" />
     </ListItemButton>
+    {user.admin === 1 && 
     <ListItemButton href="http://localhost:3000/adduser">
       <ListItemIcon>
         <PersonAddIcon />
       </ListItemIcon>
       <ListItemText primary="Add Users" />
     </ListItemButton>
-    <ListItemButton href="http://localhost:3000/viewuser">
+    }
+    {user.admin === 1 && <ListItemButton href="http://localhost:3000/viewuser">
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
       <ListItemText primary="View Users" />
     </ListItemButton>
+    }
   </React.Fragment>
 );

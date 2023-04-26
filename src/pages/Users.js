@@ -6,8 +6,8 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
-import PersonOffIcon from '@mui/icons-material/PersonOff';
-import PersonIcon from '@mui/icons-material/Person';
+// import PersonOffIcon from '@mui/icons-material/PersonOff';
+// import PersonIcon from '@mui/icons-material/Person';
 
 
 export default function Users(props) {
@@ -22,7 +22,7 @@ export default function Users(props) {
             <TableCell>Designation</TableCell>
             <TableCell>Role</TableCell>
             <TableCell>Creation Date</TableCell>
-            <TableCell>Action</TableCell>
+            {/* <TableCell>Action</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -33,7 +33,7 @@ export default function Users(props) {
               <TableCell>{user.designation}</TableCell>
               <TableCell>{user.role}</TableCell>
               <TableCell>{user.createdAt}</TableCell>
-              <TableCell>{user.isDisable ? <PersonIcon /> : <PersonOffIcon />}</TableCell>
+              {/* <TableCell>{user.isDisable ? <PersonIcon /> : <PersonOffIcon />}</TableCell> */}
             </TableRow>
           ))}
         </TableBody>

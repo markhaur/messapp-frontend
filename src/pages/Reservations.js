@@ -20,7 +20,7 @@ import Title from './Title';
 import { mainListItems } from './listItems';
 import Orders from './Orders';
 import ReservationCount from './ReservationCount';
-import { logout, getReservationsByDate } from '../api/apis';
+import { getReservationsByDate } from '../api/apis';
 
 
 const options = { day: '2-digit', month: 'long', year: 'numeric' };
@@ -36,14 +36,6 @@ function Copyright(props) {
       {'.'}
     </Typography>
   );
-}
-
-async function handleLogout() {
-  let result = await logout()
-  if (!result.isOk) {
-    alert('Unsuccessful logout')
-  }
-  window.location = 'http://127.0.0.1:3000/login'
 }
 
 // Generate Sales Data
@@ -100,6 +92,11 @@ function ReservationContent() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  
+  const handleLogout = () => {
+    localStorage.clear()
+    window.location = "http://localhost:3000/login"
+  }
 
   const [reservations, setReservations] = React.useState([]);
   const [reservationStats, setReservationStats] = React.useState({});
@@ -112,7 +109,8 @@ function ReservationContent() {
       if (response.isOk) {
         let temp = []
         let totalGuests = 0;
-        response.data.forEach(reservation => {
+        for (let i = response.data.length - 1; i >= 0; i--) {
+          let reservation = response.data[i]; 
           totalGuests = totalGuests + reservation.no_of_guests;
           temp.push({
             id: reservation.id, 
@@ -122,7 +120,7 @@ function ReservationContent() {
             guests: reservation.no_of_guests, 
             totalResr: reservation.no_of_guests + 1,
           }); 
-        });
+        }
         setReservations(temp)
         setReservationStats({ totalReservations: temp.length, totalGuests, totalMeals: temp.length + totalGuests});
         setDate(event.target.value)
@@ -138,7 +136,8 @@ function ReservationContent() {
       if (response.isOk) {
         let temp = [];
         let totalGuests = 0;
-        response.data.forEach(reservation => {
+        for (let i = response.data.length - 1; i >= 0; i--) {
+          let reservation = response.data[i];
           totalGuests = totalGuests + reservation.no_of_guests;
           temp.push({
             id: reservation.id, 
@@ -148,7 +147,7 @@ function ReservationContent() {
             guests: reservation.no_of_guests, 
             totalResr: reservation.no_of_guests + 1,
           });
-        });
+        }
         setReservations(temp);
         setReservationStats({ totalReservations: temp.length, totalGuests, totalMeals: temp.length + totalGuests});
         setDate(new Date().toLocaleDateString('en-US', options))

@@ -19,7 +19,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { mainListItems } from './listItems';
 import ReservationCount from './ReservationCount';
 import Users from './Users';
-import { getAllUsers, logout } from '../api/apis';
+import { getAllUsers } from '../api/apis';
 
 function Copyright(props) {
   return (
@@ -32,15 +32,6 @@ function Copyright(props) {
       {'.'}
     </Typography>
   );
-}
-
-
-async function handleLogout() {
-  let result = await logout()
-  if (!result.isOk) {
-    alert('Unsuccessful logout')
-  }
-  window.location = 'http://127.0.0.1:3000/login'
 }
 
 const drawerWidth = 240;
@@ -96,6 +87,11 @@ function DashboardContent() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const handleLogout = () => {
+    localStorage.clear()
+    window.location = "http://localhost:3000/login"
+  }
 
   const [users, setUsers] = React.useState([]);
   const [userStats, setUserStats] = React.useState({});
@@ -279,7 +275,7 @@ function DashboardContent() {
               </Grid>
               {/* Users */}
               <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', maxHeight: 350, overflow: 'auto' }}>
                   <Users 
                     linkText={""}
                     users={users}

@@ -19,7 +19,8 @@ export async function login(loginRequest) {
 }
 
 export async function logout() {
-    let user = JSON.parse(localStorage.getItem('USER'))
+    let user = JSON.parse(localStorage.getItem('USER'));
+    localStorage.removeItem('USER');
     const logoutUrl = `http://${BACKEND_SERVER}/auth/v1/logout`
     let logoutRequest = {
         token: user.token
@@ -34,7 +35,6 @@ export async function logout() {
             body: JSON.stringify(logoutRequest)
         }
     );
-    localStorage.removeItem('USER')
     return {isOk: response.ok, data: null}
 }
 
@@ -67,6 +67,23 @@ export async function getReservationsByDate(date) {
     const url = `http://${BACKEND_SERVER}/resvlist/v1/reservations/${date}`
 
     let response = await fetch(url)
+    let data = await response.json();
+    return {isOk: response.ok, data}
+}
+
+export async function bookReservation(reservationRequest) {
+    const url = `http://${BACKEND_SERVER}/resvlist/v1/reservations`
+
+    let response = await fetch(
+        url,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(reservationRequest)
+        }
+    );
     let data = await response.json();
     return {isOk: response.ok, data}
 }

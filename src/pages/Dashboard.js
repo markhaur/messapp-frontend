@@ -19,7 +19,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { mainListItems } from './listItems';
 import Orders from './Orders';
 import ReservationCount from './ReservationCount';
-import { logout, getReservationsByDate } from '../api/apis';
+import { getReservationsByDate } from '../api/apis';
 
 const options = { day: '2-digit', month: 'long', year: 'numeric' };
 
@@ -34,14 +34,6 @@ function Copyright(props) {
       {'.'}
     </Typography>
   );
-}
-
-async function handleLogout() {
-  let result = await logout()
-  if (!result.isOk) {
-    alert('Unsuccessful logout')
-  }
-  window.location = 'http://127.0.0.1:3000/login'
 }
 
 const drawerWidth = 240;
@@ -97,6 +89,11 @@ function DashboardContent() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const handleLogout = () => {
+    localStorage.clear()
+    window.location = "http://localhost:3000/login"
+  }
 
   const [reservations, setReservations] = React.useState([]);
   const [reservationStats, setReservationStats] = React.useState({});

@@ -17,7 +17,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { mainListItems } from './listItems';
-import { logout } from '../api/apis';
 import BookReservationForm from './BookReservationForm';
 
 function Copyright(props) {
@@ -31,14 +30,6 @@ function Copyright(props) {
       {'.'}
     </Typography>
   );
-}
-
-async function handleLogout() {
-  let result = await logout()
-  if (!result.isOk) {
-    alert('Unsuccessful logout')
-  }
-  window.location = 'http://127.0.0.1:3000/login'
 }
 
 const drawerWidth = 240;
@@ -94,6 +85,11 @@ function BookSlot() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const handleLogout = () => {
+    localStorage.clear()
+    window.location = "http://localhost:3000/login"
+  }
 
   return (
     <ThemeProvider theme={mdTheme}>
