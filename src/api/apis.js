@@ -45,3 +45,28 @@ export async function getAllUsers() {
     let data = await response.json();
     return {isOk: response.ok, data}
 }
+
+export async function addUser(addUserRequest) {
+    const url = `http://${BACKEND_SERVER}/userlist/v1/users`
+    
+    let response = await fetch(
+        url, 
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(addUserRequest)
+        }
+    );
+    let data = await response.json();
+    return {isOk: response.ok, data}
+}
+
+export async function getReservationsByDate(date) {
+    const url = `http://${BACKEND_SERVER}/resvlist/v1/reservations/${date}`
+
+    let response = await fetch(url)
+    let data = await response.json();
+    return {isOk: response.ok, data}
+}
