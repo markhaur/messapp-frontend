@@ -17,8 +17,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { mainListItems } from './listItems';
-import AddUserForm from './AddUserForm';
 import { logout } from '../api/apis';
+import BookReservationForm from './BookReservationForm';
 
 function Copyright(props) {
   return (
@@ -89,7 +89,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
-function UserPage() {
+function BookSlot() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -124,7 +124,7 @@ function UserPage() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Add User
+              Book Reservation
             </Typography>
             <IconButton color="inherit" onClick={handleLogout}>
               <LogoutIcon />
@@ -167,7 +167,7 @@ function UserPage() {
               {/* Recent Orders */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <AddUserForm />
+                  <BookReservationForm />
                 </Paper>
               </Grid>
             </Grid>
@@ -179,6 +179,6 @@ function UserPage() {
   );
 }
 
-export default function AddUser() {
-  return <UserPage />;
+export default function BookReservation() {
+  return <BookSlot />;
 }
