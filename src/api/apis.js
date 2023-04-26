@@ -1,8 +1,7 @@
-// const SERVER_URL = process.env.BACKEND_SERVER
-const BACKEND_SERVER = "192.168.27.129:8085"
+import { AppConfig } from "../config/Config";
 
 export async function login(loginRequest) {
-    const loginUrl = `http://${BACKEND_SERVER}/auth/v1/login`
+    const loginUrl = `${AppConfig.BACKEND_SERVER}/auth/v1/login`
     
     const response = await fetch(
         loginUrl,
@@ -21,7 +20,7 @@ export async function login(loginRequest) {
 export async function logout() {
     let user = JSON.parse(localStorage.getItem('USER'));
     localStorage.removeItem('USER');
-    const logoutUrl = `http://${BACKEND_SERVER}/auth/v1/logout`
+    const logoutUrl = `${AppConfig.BACKEND_SERVER}/auth/v1/logout`
     let logoutRequest = {
         token: user.token
     }
@@ -39,7 +38,7 @@ export async function logout() {
 }
 
 export async function getAllUsers() {
-    const userListUrl = `http://${BACKEND_SERVER}/userlist/v1/users`
+    const userListUrl = `${AppConfig.BACKEND_SERVER}/userlist/v1/users`
     
     let response = await fetch(userListUrl)
     let data = await response.json();
@@ -47,7 +46,7 @@ export async function getAllUsers() {
 }
 
 export async function addUser(addUserRequest) {
-    const url = `http://${BACKEND_SERVER}/userlist/v1/users`
+    const url = `${AppConfig.BACKEND_SERVER}/userlist/v1/users`
     
     let response = await fetch(
         url, 
@@ -64,7 +63,7 @@ export async function addUser(addUserRequest) {
 }
 
 export async function getReservationsByDate(date) {
-    const url = `http://${BACKEND_SERVER}/resvlist/v1/reservations/${date}`
+    const url = `${AppConfig.BACKEND_SERVER}/resvlist/v1/reservations/${date}`
 
     let response = await fetch(url)
     let data = await response.json();
@@ -72,7 +71,7 @@ export async function getReservationsByDate(date) {
 }
 
 export async function getReservationsByID(id) {
-    const url = `http://${BACKEND_SERVER}/resvlist/v1/reservationsbyid/${id}`
+    const url = `${AppConfig.BACKEND_SERVER}/resvlist/v1/reservationsbyid/${id}`
 
     let response = await fetch(url)
     let data = await response.json();
@@ -80,7 +79,7 @@ export async function getReservationsByID(id) {
 }
 
 export async function bookReservation(reservationRequest) {
-    const url = `http://${BACKEND_SERVER}/resvlist/v1/reservations`
+    const url = `${AppConfig.BACKEND_SERVER}/resvlist/v1/reservations`
 
     let response = await fetch(
         url,

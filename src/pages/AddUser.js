@@ -18,6 +18,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { mainListItems } from './listItems';
 import AddUserForm from './AddUserForm';
+import { AppConfig } from '../config/Config';
 
 function Copyright(props) {
   return (
@@ -88,13 +89,13 @@ function UserPage() {
 
   const handleLogout = () => {
     localStorage.clear();
-    window.location = "http://localhost:3000/login";
+    window.location = AppConfig.LOGIN_URL;
   }
 
   React.useEffect(() => {
     let loggedInUser = localStorage.getItem('USER');
     if (!loggedInUser) {
-      window.location = 'http://localhost:3000/login'
+      window.location = AppConfig.LOGIN_URL;
     }
   }, []);
 

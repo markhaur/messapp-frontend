@@ -6,6 +6,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
+import { AppConfig } from '../config/Config';
 
 
 export default function Orders(props) {
@@ -34,7 +35,7 @@ export default function Orders(props) {
           ))}
         </TableBody>
       </Table>
-      <Link color="primary" href="http://localhost:3000/reservations" sx={{ mt: 3 }}>
+      <Link color="primary" href={AppConfig.RESERVATIONS_URL} sx={{ mt: 3 }}>
         {props.linkText}
       </Link>
     </React.Fragment>

@@ -21,6 +21,7 @@ import { mainListItems } from './listItems';
 import Orders from './Orders';
 import ReservationCount from './ReservationCount';
 import { getReservationsByDate, getReservationsByID } from '../api/apis';
+import { AppConfig } from '../config/Config';
 
 
 const options = { day: '2-digit', month: 'long', year: 'numeric' };
@@ -96,7 +97,7 @@ function ReservationContent() {
   
   const handleLogout = () => {
     localStorage.clear();
-    window.location = "http://localhost:3000/login";
+    window.location = AppConfig.LOGIN_URL;
   }
 
   const [reservations, setReservations] = React.useState([]);
@@ -138,7 +139,7 @@ function ReservationContent() {
   React.useEffect(() => {
     let loggedInUser = localStorage.getItem('USER');
     if (!loggedInUser) {
-      window.location = 'http://localhost:3000/login'
+      window.location = AppConfig.LOGIN_URL;
     }
 
     async function fetchData() {

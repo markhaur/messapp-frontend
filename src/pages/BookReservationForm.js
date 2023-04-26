@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { bookReservation } from '../api/apis';
+import { AppConfig } from '../config/Config';
 
 const theme = createTheme();
 const options = { day: '2-digit', month: 'long', year: 'numeric' };
@@ -32,7 +33,7 @@ export default function BookReservationForm() {
     
     if (result.isOk) {
       alert('reservation is successfully booked!')
-      window.location = 'http://127.0.0.1:3000/reservations'
+      window.location = AppConfig.RESERVATIONS_URL;
     } else {
       alert('There is problem while saving user!')
     }

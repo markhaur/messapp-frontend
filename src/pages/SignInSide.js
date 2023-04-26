@@ -47,7 +47,6 @@ export default function SignInSide() {
     if (result.isOk) {
       localStorage.setItem('USER', JSON.stringify(result.data))
       window.location = AppConfig.DASHBOARD_URL;
-      // window.location = 'http://127.0.0.1:3000/dashboard'
     } else {
       alert('login unsuccessful')
     }

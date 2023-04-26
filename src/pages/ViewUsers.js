@@ -20,6 +20,7 @@ import { mainListItems } from './listItems';
 import ReservationCount from './ReservationCount';
 import Users from './Users';
 import { getAllUsers } from '../api/apis';
+import { AppConfig } from '../config/Config';
 
 function Copyright(props) {
   return (
@@ -90,7 +91,7 @@ function DashboardContent() {
 
   const handleLogout = () => {
     localStorage.clear();
-    window.location = "http://localhost:3000/login";
+    window.location = AppConfig.LOGIN_URL;
   }
 
   const [users, setUsers] = React.useState([]);
@@ -99,7 +100,7 @@ function DashboardContent() {
   React.useEffect(() => {
     let loggedInUser = localStorage.getItem('USER');
     if (!loggedInUser) {
-      window.location = 'http://localhost:3000/login'
+      window.location = AppConfig.LOGIN_URL;
     }
     async function fetchData() {
       const response = await getAllUsers();

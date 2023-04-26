@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { addUser } from '../api/apis';
+import { AppConfig } from '../config/Config';
 
 const theme = createTheme();
 
@@ -37,18 +38,10 @@ export default function AddUserForm() {
     
     if (result.isOk) {
       alert('User is successfully saved!')
-      window.location = 'http://127.0.0.1:3000/viewuser'
+      window.location = AppConfig.VIEW_USER_URL;
     } else {
       alert('There is problem while saving user!')
     }
-    console.log('response: ', result.data)
-    // console.log({
-    //   name: data.get('name'),
-    //   empid: data.get('empid'),
-    //   designation: data.get('designation'),
-    //   admin: data.get('admin'),
-    //   active: data.get('active')
-    // });
   };
 
   return (

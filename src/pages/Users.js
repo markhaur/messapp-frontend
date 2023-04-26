@@ -6,6 +6,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
+import { AppConfig } from '../config/Config';
 // import PersonOffIcon from '@mui/icons-material/PersonOff';
 // import PersonIcon from '@mui/icons-material/Person';
 
@@ -38,7 +39,7 @@ export default function Users(props) {
           ))}
         </TableBody>
       </Table>
-      <Link color="primary" href="http://localhost:3000/users" sx={{ mt: 3 }}>
+      <Link color="primary" href={AppConfig.VIEW_USER_URL} sx={{ mt: 3 }}>
         {props.linkText}
       </Link>
     </React.Fragment>

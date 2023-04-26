@@ -8,6 +8,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import FastfoodIcon from '@mui/icons-material/Fastfood';
+import { AppConfig } from '../config/Config';
 
 let user = JSON.parse(localStorage.getItem('USER'))
 
@@ -17,34 +18,35 @@ export const mainListItems = (
       {`Hey ${user?.name}!`}
     </ListSubheader>
     {user?.admin === 1 && 
-    <ListItemButton href="http://localhost:3000/dashboard">
+    <ListItemButton href={AppConfig.DASHBOARD_URL}>
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItemButton>
     }
-    <ListItemButton href="http://localhost:3000/reservations">
+    <ListItemButton href={AppConfig.RESERVATIONS_URL}>
       <ListItemIcon>
         <RestaurantIcon />
       </ListItemIcon>
       <ListItemText primary="Reservations" />
     </ListItemButton>
-    <ListItemButton href="http://localhost:3000/bookreservations">
+    <ListItemButton href={AppConfig.BOOK_RESERVATION_URL}>
       <ListItemIcon>
         <FastfoodIcon />
       </ListItemIcon>
       <ListItemText primary="Lunch Reservation" />
     </ListItemButton>
     {user?.admin === 1 && 
-    <ListItemButton href="http://localhost:3000/adduser">
+    <ListItemButton href={AppConfig.ADD_USER_URL}>
       <ListItemIcon>
         <PersonAddIcon />
       </ListItemIcon>
       <ListItemText primary="Add Users" />
     </ListItemButton>
     }
-    {user?.admin === 1 && <ListItemButton href="http://localhost:3000/viewuser">
+    {user?.admin === 1 && 
+    <ListItemButton href={AppConfig.VIEW_USER_URL}>
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>

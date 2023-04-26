@@ -20,6 +20,7 @@ import { mainListItems } from './listItems';
 import Orders from './Orders';
 import ReservationCount from './ReservationCount';
 import { getReservationsByDate } from '../api/apis';
+import { AppConfig } from '../config/Config';
 
 const options = { day: '2-digit', month: 'long', year: 'numeric' };
 
@@ -92,7 +93,7 @@ function DashboardContent() {
 
   const handleLogout = () => {
     localStorage.clear();
-    window.location = "http://localhost:3000/login";
+    window.location = AppConfig.LOGIN_URL;
   }
 
   const [reservations, setReservations] = React.useState([]);
@@ -102,7 +103,7 @@ function DashboardContent() {
   React.useEffect(() => {
     let loggedInUser = localStorage.getItem('USER');
     if (!loggedInUser) {
-      window.location = 'http://localhost:3000/login'
+      window.location = AppConfig.LOGIN_URL;
     }
     async function fetchData() {
       let today = new Date().toISOString().split('T')[0];
@@ -215,7 +216,7 @@ function DashboardContent() {
                   <ReservationCount 
                     title={"Today's Reservations"}
                     count={reservationStats.totalReservations}
-                    link={"http://localhost:3000/reservations"}
+                    link={AppConfig.RESERVATIONS_URL}
                     linkDescription={"View today's reservations"}
                     date={date}
                   />
@@ -234,7 +235,7 @@ function DashboardContent() {
                   <ReservationCount 
                     title={"Today's Guests"}
                     count={reservationStats.totalGuests}
-                    link={"http://localhost:3000/reservations"}
+                    link={AppConfig.RESERVATIONS_URL}
                     linkDescription={"View today's reservations"}
                     date={date}
                   />
@@ -253,7 +254,7 @@ function DashboardContent() {
                   <ReservationCount 
                     title={"Today's Meals"}
                     count={reservationStats.totalMeals}
-                    link={"http://localhost:3000/reservations"}
+                    link={AppConfig.RESERVATIONS_URL}
                     linkDescription={"View today's reservations"}
                     date={date}
                   />
