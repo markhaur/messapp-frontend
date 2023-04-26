@@ -71,6 +71,14 @@ export async function getReservationsByDate(date) {
     return {isOk: response.ok, data}
 }
 
+export async function getReservationsByID(id) {
+    const url = `http://${BACKEND_SERVER}/resvlist/v1/reservationsbyid/${id}`
+
+    let response = await fetch(url)
+    let data = await response.json();
+    return {isOk: response.ok, data}
+}
+
 export async function bookReservation(reservationRequest) {
     const url = `http://${BACKEND_SERVER}/resvlist/v1/reservations`
 
